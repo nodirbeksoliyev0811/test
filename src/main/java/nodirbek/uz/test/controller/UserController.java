@@ -1,6 +1,7 @@
 package nodirbek.uz.test.controller;
 
 import lombok.RequiredArgsConstructor;
+import nodirbek.uz.test.dto.MessageResponse;
 import nodirbek.uz.test.dto.OneResponse;
 import nodirbek.uz.test.dto.UserResponse;
 import nodirbek.uz.test.entity.UserEntity;
@@ -28,5 +29,34 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<UserEntity>> getAllUsers() {
         return ResponseEntity.ok(usersRepository.findAll());
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<Object> getUserById(@PathVariable("id") Long id) {
+        if (usersRepository.findById(id).isPresent()) {
+            return ResponseEntity.ok(usersRepository.findById(id));
+        } else {
+            return ResponseEntity.ok(new MessageResponse("User not found"));
+        }
+    }
+
+    @PostMapping("/update_user/{id}")
+    public ResponseEntity<MessageResponse> updateUser(@PathVariable("id") Long id, @RequestBody UserResponse response) {
+        if (usersRepository.findById(id).isPresent()) {
+            usersRepository.updateById(response.getName(), response.getSurname(), id);
+            return ResponseEntity.ok(new MessageResponse("User updated"));
+        } else {
+            return ResponseEntity.ok(new MessageResponse("User not found"));
+        }
+    }
+
+    @DeleteMapping("/delete_user")
+    public ResponseEntity<MessageResponse> deleteUser(@RequestParam Long id) {
+        if (usersRepository.findById(id).isPresent()) {
+            usersRepository.deleteById(id);
+            return ResponseEntity.ok(new MessageResponse("User deleted"));
+        } else {
+            return ResponseEntity.ok(new MessageResponse("User not found"));
+        }
     }
 }

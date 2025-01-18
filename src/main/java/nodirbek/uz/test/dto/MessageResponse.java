@@ -1,10 +1,10 @@
 package nodirbek.uz.test.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class OneResponse {
+public class MessageResponse {
     private String message;
-    private Object response;
 }
