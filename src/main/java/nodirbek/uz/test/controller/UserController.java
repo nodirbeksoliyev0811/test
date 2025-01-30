@@ -40,10 +40,10 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update_user/{id}")
+    @PostMapping("/update_user")
     public ResponseEntity<MessageResponse> updateUser(@PathVariable("id") Long id, @RequestBody UserResponse response) {
         if (usersRepository.findById(id).isPresent()) {
-            usersRepository.updateById(response.getName(), response.getSurname(), id);
+            usersRepository.updateById(response.getName(), response.getSurname(), response.getId());
             return ResponseEntity.ok(new MessageResponse("User updated"));
         } else {
             return ResponseEntity.ok(new MessageResponse("User not found"));
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete_user")
-    public ResponseEntity<MessageResponse> deleteUser(@RequestParam Long id) {
+    public ResponseEntity<MessageResponse> deleteUser(@RequestParam("id") Long id) {
         if (usersRepository.findById(id).isPresent()) {
             usersRepository.deleteById(id);
             return ResponseEntity.ok(new MessageResponse("User deleted"));
